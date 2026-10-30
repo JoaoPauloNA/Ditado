@@ -1,4 +1,5 @@
 build/
+releases/backups/
 references/
 .DS_Store
 *.xcuserstate

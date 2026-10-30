@@ -10,7 +10,7 @@ enum ShortcutError: LocalizedError {
         case .occupied: return "Essa combinação está reservada exclusivamente por outro aplicativo. O atalho anterior foi mantido."
         case .registration(let code): return "O macOS não permitiu registrar esta combinação (\(code)). O atalho anterior foi mantido."
         case .systemCheckFailed: return "Não foi possível verificar os atalhos do macOS. Tente novamente antes de salvar."
-        case .unavailable: return "O controle de atalhos não está disponível. Reinicie o Ditado e tente novamente."
+        case .unavailable: return "O controle de atalhos não está disponível. Reinicie o BlabberType e tente novamente."
         }
     }
 }

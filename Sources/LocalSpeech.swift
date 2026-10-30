@@ -14,7 +14,7 @@ final class LocalSpeech {
             SFSpeechRecognizer.requestAuthorization { continuation.resume(returning: $0) }
         }
         guard status == .authorized else {
-            throw DictationError.message("Autorize o reconhecimento de fala para Ditado em Ajustes do Sistema → Privacidade e Segurança.")
+            throw DictationError.message("Autorize o reconhecimento de fala para BlabberType em Ajustes do Sistema → Privacidade e Segurança.")
         }
         guard let recognizer = SFSpeechRecognizer(locale: Locale(identifier: language)),
               recognizer.supportsOnDeviceRecognition else {

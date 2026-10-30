@@ -212,7 +212,7 @@ final class DictationModel: ObservableObject {
                 let allowed = await AVCaptureDevice.requestAccess(for: .audio)
                 try Task.checkCancellation()
                 guard generation == token else { return }
-                guard allowed else { throw DictationError.message("Autorize o microfone para Ditado em Ajustes do Sistema → Privacidade e Segurança → Microfone.") }
+                guard allowed else { throw DictationError.message("Autorize o microfone para BlabberType em Ajustes do Sistema → Privacidade e Segurança → Microfone.") }
                 discardAudio()
                 let url = FileManager.default.temporaryDirectory.appendingPathComponent("ditado-\(UUID().uuidString).wav")
                 audioURL = url

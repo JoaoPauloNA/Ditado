@@ -6,8 +6,9 @@ struct DitadoApp: App {
     @StateObject private var model = DictationModel()
 
     var body: some Scene {
-        Window("Ditado", id: "ditado") {
+        Window("BlabberType", id: "ditado") {
             DitadoView(model: model)
+                .background(MainWindowLifecycle())
                 .frame(minWidth: 820, minHeight: 600)
                 .preferredColorScheme(.dark)
                 .tint(.mint)
@@ -29,7 +30,7 @@ struct DitadoApp: App {
             MenuContent(model: model)
         } label: {
             Image(systemName: model.isRecording ? "mic.fill" : model.isProcessing ? "ellipsis.bubble" : "waveform")
-                .accessibilityLabel("Ditado")
+                .accessibilityLabel("BlabberType")
         }
     }
 }
@@ -44,10 +45,38 @@ private struct MenuContent: View {
         if model.isBusy { Button("Cancelar") { model.cancel() } }
         Button("Copiar último texto") { model.copy() }.disabled(model.text.isEmpty)
         Divider()
-        Button("Abrir Ditado") { openWindow(id: "ditado"); NSApp.activate(ignoringOtherApps: true) }
+        Button("Abrir BlabberType") {
+            NSApp.setActivationPolicy(.regular)
+            openWindow(id: "ditado")
+            NSApp.activate(ignoringOtherApps: true)
+        }
         Button("Abrir Painel CLI") { model.openPainel() }
         Divider()
         Button("Sair") { NSApp.terminate(nil) }.keyboardShortcut("q")
+    }
+}
+
+private struct MainWindowLifecycle: NSViewRepresentable {
+    func makeNSView(context: Context) -> WindowLifecycleView { WindowLifecycleView() }
+    func updateNSView(_ view: WindowLifecycleView, context: Context) { }
+}
+
+private final class WindowLifecycleView: NSView {
+    private var closeObserver: NSObjectProtocol?
+
+    override func viewDidMoveToWindow() {
+        super.viewDidMoveToWindow()
+        if let closeObserver { NotificationCenter.default.removeObserver(closeObserver) }
+        closeObserver = nil
+        guard let window else { return }
+        NSApp.setActivationPolicy(.regular)
+        closeObserver = NotificationCenter.default.addObserver(
+            forName: NSWindow.willCloseNotification, object: window, queue: .main
+        ) { _ in NSApp.setActivationPolicy(.accessory) }
+    }
+
+    deinit {
+        if let closeObserver { NotificationCenter.default.removeObserver(closeObserver) }
     }
 }
 
@@ -70,7 +99,7 @@ struct DitadoView: View {
             VStack(alignment: .leading, spacing: 24) {
                 HStack(spacing: 10) {
                     Image(systemName: "waveform").font(.title2.weight(.bold)).foregroundStyle(.mint)
-                    Text("ditado").font(.title2.weight(.semibold))
+                    Text("BlabberType").font(.title2.weight(.semibold))
                 }.padding(.horizontal, 20).padding(.top, 28)
                 List(DictationTab.allCases, selection: $tab) { item in
                     Label(item.rawValue, systemImage: item.symbol).tag(item).padding(.vertical, 5)
@@ -209,7 +238,7 @@ struct DitadoView: View {
                             .font(.caption).foregroundStyle(.secondary)
                     case .whisper:
                         TextField("Endereço do Whisper", text: $model.settings.whisperEndpoint)
-                        Text("Conecte um whisper-server em execução neste Mac. O modelo é carregado pelo servidor; o Ditado envia WAV de 16 kHz.")
+                        Text("Conecte um whisper-server em execução neste Mac. O modelo é carregado pelo servidor; o BlabberType envia WAV de 16 kHz.")
                             .font(.caption).foregroundStyle(.secondary)
                     case .api:
                         TextField("Endereço de transcrição", text: $model.settings.apiEndpoint)

@@ -1,7 +1,7 @@
-# Ditado
+# BlabberType
 
-App pessoal de ditado para macOS, com transcrição local ou por API e revisão
-opcional usando uma conexão já cadastrada no Painel CLI. O Ditado é separado da
+Aplicativo de ditado para macOS, com transcrição local ou por API e revisão
+opcional usando uma conexão já cadastrada no Painel CLI. O BlabberType é separado da
 central: não instala, inicia, encerra nem modifica proxies ou logins do Painel.
 
 ## Compilar e abrir
@@ -14,8 +14,19 @@ python3 scripts/test.py
 python3 scripts/build.py --open
 ```
 
-O aplicativo fica em `build/Ditado.app`. Pode ser movido para `~/Applications`.
-Permanece na barra de menus quando a janela é fechada. Para encerrar, use Sair.
+O aplicativo fica em `build/BlabberType.app`. Pode ser movido para `~/Applications`.
+Permanece na barra de menus quando a janela é fechada e sai do Dock; abrir a janela
+novamente restaura o ícone no Dock. Para encerrar, use Sair no menu da barra.
+
+Para criar o instalador nativo, execute `python3 scripts/build-installer.py`.
+O pacote fica em `build/BlabberType-0.1.4-instalador.pkg` e instala o app em
+`/Applications`. O pacote gerado localmente não é assinado nem notarizado pela
+Apple; o aplicativo pode usar uma assinatura local ou ad hoc e o macOS poderá
+impedir sua abertura ou instalação. Para evitar instalações duplicadas, confira se uma cópia anterior existe
+em `~/Applications` antes de instalar. Os dados existentes continuam em
+`~/Library/Application Support/Ditado` para manter compatibilidade.
+
+O código está disponível sob a [licença MIT](LICENSE).
 
 ## Primeiro ditado
 
@@ -26,7 +37,7 @@ Selecione o campo de texto no aplicativo de destino e use o atalho para ditar.
 Ao terminar, o texto é colado automaticamente naquele campo, substituindo a
 seleção ou inserindo na posição do cursor. O texto também fica copiado.
 
-Na primeira vez, clique em **Permitir colagem automática** e habilite **Ditado**
+Na primeira vez, clique em **Permitir colagem automática** e habilite **BlabberType**
 em **Ajustes do Sistema → Privacidade e Segurança → Acessibilidade**. Essa
 permissão do macOS é necessária para inserir texto em outros aplicativos.
 O controle fica em **Conexões → Neste Mac → Colar automaticamente no campo
@@ -34,8 +45,8 @@ selecionado**, ativado por padrão, inclusive nas configurações da versão ant
 
 O destino é capturado antes de abrir as permissões de voz/microfone. O app guarda
 somente o elemento focado e a posição da seleção, sem ler o texto do campo.
-Se você iniciar pelo botão do Ditado, ele usa o campo do último aplicativo
-externo. Ao terminar, retorna ao aplicativo de destino apenas se o Ditado ainda
+Se você iniciar pelo botão do BlabberType, ele usa o campo do último aplicativo
+externo. Ao terminar, retorna ao aplicativo de destino apenas se o BlabberType ainda
 estiver em primeiro plano. Se você mudar para outro aplicativo, outro campo ou
 outra posição de cursor, o resultado fica copiado para colagem manual com
 **Command + V**. O mesmo acontece quando a permissão de Acessibilidade faltar.
@@ -53,10 +64,10 @@ depois de parar; esta versão não oferece transcrição parcial ao vivo.
 Em **Conexões → Neste Mac → Atalho global**, clique em **Alterar atalho…**.
 Escolha a tecla e pelo menos dois modificadores, incluindo Control ou Command.
 O padrão continua sendo **Control + Shift + Espaço**. A combinação escolhida
-aparece no painel e no menu do Ditado. A tela permite voltar ao padrão,
+aparece no painel e no menu do BlabberType. A tela permite voltar ao padrão,
 verificar novamente a disponibilidade e cancelar sem mudar a configuração.
 
-Antes de salvar, o Ditado bloqueia combinações comuns de aplicativos, verifica
+Antes de salvar, o BlabberType bloqueia combinações comuns de aplicativos, verifica
 os atalhos habilitados do macOS com `CopySymbolicHotKeys` e testa se existe uma
 reserva global exclusiva. O novo registro e a gravação da configuração precisam
 funcionar antes que o registro anterior seja removido. Um erro de registro ou
@@ -69,7 +80,7 @@ mesma combinação por vários apps e não expõe um catálogo completo desses
 registros nem de todos os atalhos internos de aplicativos. A ausência de erro
 de registro não prova ausência de conflito. Por isso a interface diz "nenhum
 conflito detectado nas verificações disponíveis" e recomenda testar a combinação
-nos programas utilizados. Após a sondagem, o registro ativo do Ditado é não
+nos programas utilizados. Após a sondagem, o registro ativo do BlabberType é não
 exclusivo, para não silenciar permanentemente outro aplicativo. A implementação
 nunca altera os atalhos configurados no macOS ou em outros programas.
 
@@ -100,7 +111,7 @@ Referências: [reconhecimento no dispositivo da Apple](https://developer.apple.c
 ## Painel CLI como central
 
 Em **Conexões → Painel CLI**, atualize os perfis, selecione um perfil e clique
-em **Buscar modelos**. Ative o proxy no Painel se estiver parado. O Ditado consulta
+em **Buscar modelos**. Ative o proxy no Painel se estiver parado. O BlabberType consulta
 `/v1/models` desse perfil usando apenas a chave de cliente correspondente.
 
 Ative **Corrigir pontuação e pequenos erros** para enviar o texto transcrito ao
